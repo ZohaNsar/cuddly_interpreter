@@ -3,7 +3,9 @@ package Engine;
 import java.util.ArrayList;
 
 abstract public class Evaluate {
-    public abstract int evaluate_exp(ArrayList<String> expression);
+    public abstract int evaluate_pexp(ArrayList<String> expression);
+    public abstract void evaluate_pstr(ArrayList<String> expression);
+    public abstract int evaluate_pvar(ArrayList<String> expression);
     public abstract ArrayList<String> evaluate_loop(ArrayList<String> expression);
     public abstract void evaluate_vassignment(ArrayList<String> expression);
     public abstract ArrayList<String> evaluate_conditional(ArrayList<String> expression);
