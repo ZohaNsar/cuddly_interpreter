@@ -1,5 +1,7 @@
 package jHobab;
 
+import com.sun.jdi.ArrayReference;
+
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,37 +34,53 @@ public class Parser extends Engine.Parser {
 
     public ArrayList<String> ifconditional(String line){
         final String conditional_regex = "(if)\\s(\\D+)\\s*(:)\\s*(print)\\s*(\\()\\s*(\\D+)\\s*(\\))(;)\\n(else)\\s(\\D+)\\s*(:)\\s*(print)\\s*(\\()\\s*(\\D+)\\s*(\\))(;)";
-         ArrayList<String> result = ifmatch(line, conditional_regex);
-         if (result != null)
+        ArrayList<String> result = ifmatch(line, conditional_regex);
+        if (result != null)
              return result;
 
-         return null;
+        return null;
     }
 
     public ArrayList<String> ifloop(String line){
         final String loop_regex = "(loop)\\s*(\\()\\s*([\\D+\\d+])\\s*(\\))\\s*(:)\\s*(print)\\s*(\\()\\s*(\\D+)\\s*(\\))\\s*(;)";
-         ArrayList<String> result = ifmatch(line, loop_regex);
-         if (result != null)
+        ArrayList<String> result = ifmatch(line, loop_regex);
+        if (result != null)
              return result;
 
-         return null;
+        return null;
     }
 
     public ArrayList<String> ifcalculation(String line){
         final String calculation ="(Int)\\s*(\\w+)\\s*(=)\\s*((add)\\s*(\\()\\s*(\\w+|\\d+)\\s*(,)\\s*(\\w+|\\d+)\\s*(\\))|(sub)\\s*(\\()\\s*(\\w+|\\d+)\\s*(,)\\s*(\\w+|\\d+)\\s*(\\))|(mul)\\s*(\\()\\s*(\\w+|\\d+)\\s*(,)\\s*(\\w+|\\d+)\\s*(\\))|(div)\\s*(\\()\\s*(\\w+|\\d+)\\s*(,)\\s*(\\w+|\\d+)\\s*(\\)))\\s*(;)";
-         ArrayList<String> result = ifmatch(line, calculation);
-         if (result != null)
+        ArrayList<String> result = ifmatch(line, calculation);
+        if (result != null)
              return result;
 
+        return null;
+    }
+
+
+    public ArrayList<String> ifinout_arithmetic(String line){
+        final String inout_regex ="(print)\\s*(\\()\\s*((add)\\s*(\\()\\s*(\\w+|\\d+)\\s*(,)\\s*(\\w+|\\d+)\\s*(\\))|(sub)\\s*(\\()\\s*(\\w+|\\d+)\\s*(,)\\s*(\\w+|\\d+)\\s*(\\))|(mul)\\s*(\\()\\s*(\\w+|\\d+)\\s*(,)\\s*(\\w+|\\d+)\\s*(\\))|(div)\\s*(\\()\\s*(\\w+|\\d+)\\s*(,)\\s*(\\w+|\\d+)\\s*(\\)))\\s*(\\))\\s*(;)";
+        ArrayList<String> result = ifmatch(line, inout_regex);
+        if (result != null)
+            return result;
+        return null;
+    }
+
+    public ArrayList<String> ifinout_str(String line){
+         final String inout_regex = "(print)\\s*(\\()\\s*('\\s*\\w+\\s*')\\s*(\\))\\s*(;)";
+         ArrayList<String> result = ifmatch(line, inout_regex);
+         if (result != null)
+            return result;
          return null;
     }
 
-    public ArrayList<String> ifinout(String line){
-        final String inout_regex = "^(print)\\s*(\\()\\s*((add)\\s*(\\()\\s*(\\d+)\\s*(,)\\s*(\\d+)\\s*(\\))|(sub)\\s*(\\()\\s*(\\d+)\\s*(,)\\s*(\\d+)\\s*(\\))|(mul)\\s*(\\()\\s*(\\d+)\\s*(,)\\s*(\\d+)\\s*(\\))|(div)\\s*(\\()\\s*(\\d+)\\s*(,)\\s*(\\d+)\\s*(\\))|(\\d+)\\s*|(\\s*'\\w+'\\s*)\\s*)\\s*(\\))(;$)";
+    public ArrayList<String> ifinout_var(String line){
+         final String inout_regex ="(print)\\s*(\\()\\s*(\\w+)\\s*(\\))\\s*(;)";
          ArrayList<String> result = ifmatch(line, inout_regex);
          if (result != null)
-             return result;
-
+            return result;
          return null;
     }
 
@@ -84,8 +102,16 @@ public class Parser extends Engine.Parser {
             tokens = ifconditional(line);
         }
 
-        if(ifinout(line) != null){
-            tokens = ifinout(line);
+        if(ifinout_arithmetic(line) != null){
+            tokens = ifinout_arithmetic(line);
+        }
+
+        if(ifinout_str(line) != null){
+            tokens = ifinout_str(line);
+        }
+
+        if(ifinout_var(line) != null){
+            tokens = ifinout_var(line);
         }
 
         if(ifloop(line) != null){
