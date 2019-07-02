@@ -24,7 +24,7 @@ public class Parser extends Engine.Parser {
         return null;
     }
     public ArrayList<String> ifvariable(String line){
-         final String variable_regex = "(Int|Str|Float|Bools)\\s+[a-z1-9]+\\s*=\\s*\\d+\\s*;";
+         final String variable_regex = "((Int)\\s*(\\w+)\\s*(=)\\s*(\\d+)|(Str)\\s*(\\w+)\\s*(=)\\s*(\\s*'\\s*\\w+\\s*'\\s*)|(Float)\\s*(\\w+)\\s*(=)\\s*(\\d+(.\\d+))|(Bool)\\s*(\\w+)\\s*(=)\\s*(true|false))\\s*(;)";
          ArrayList<String> result = ifmatch(line, variable_regex);
          if (result != null)
              return result;
