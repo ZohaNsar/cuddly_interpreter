@@ -17,7 +17,7 @@ public class Parser extends Engine.Parser {
         final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         final Matcher matcher = pattern.matcher(line);
         while (matcher.find()) {
-            System.out.println("Full match: " + matcher.group(0));
+//            System.out.println("Full match: " + matcher.group(0));
             for (int i = 1; i <= matcher.groupCount() && matcher.group(i) != null; i++) {
                 tokens.add(i - 1, matcher.group(i));;
             }
@@ -57,7 +57,7 @@ public class Parser extends Engine.Parser {
         ArrayList<String> result = ifmatch(line, calculation);
         if (result != null)
              return result;
-
+        System.out.println("no bool");
         return null;
     }
 
@@ -75,6 +75,7 @@ public class Parser extends Engine.Parser {
          ArrayList<String> result = ifmatch(line, inout_regex);
          if (result != null)
             return result;
+        System.out.println("Syntax errror");
          return null;
     }
 
@@ -88,42 +89,40 @@ public class Parser extends Engine.Parser {
 
     @Override
     public ArrayList<String> toTokens(String line){
-        ArrayList<String> tokens = new ArrayList<String>();
+        ArrayList<String> tokens = null;
 
         if(ifvariable(line) != null){
             tokens = ifvariable(line);
 
         }
 
-        if(ifcalculation(line) != null){
+        else if(ifcalculation(line) != null){
             tokens = ifcalculation(line);
 
         }
 
-        if(ifconditional(line) != null){
+        else if(ifconditional(line) != null){
             tokens = ifconditional(line);
         }
 
-        if(ifinout_arithmetic(line) != null){
+        else if(ifinout_arithmetic(line) != null){
             tokens = ifinout_arithmetic(line);
         }
 
-        if(ifinout_str(line) != null){
+        else if(ifinout_str(line) != null){
             tokens = ifinout_str(line);
         }
 
-        if(ifinout_var(line) != null){
+        else if(ifinout_var(line) != null){
             tokens = ifinout_var(line);
         }
 
-        if(ifloop(line) != null){
+        else if(ifloop(line) != null){
             tokens = ifloop(line);
         }
 
-        if (tokens != null)
-            return tokens;
+        return tokens;
 
-        return null;
     }
 
     public void check_exceptions(String line) {

@@ -30,11 +30,11 @@ public class Evaluate extends Engine.Evaluate {
             check_vassignment_evaluation(expression);
 
         if (expression.get(0) == "If") {
-
+            evaluate_conditional(expression);
         }
 
         if (expression.get(0) == "loop"){
-
+            evaluate_loop(expression);
         }
 
     }
