@@ -9,6 +9,8 @@ import java.util.regex.Pattern;
 public class Parser extends Engine.Parser {
 
 
+    final String LoopIfElseBlock ="(?:(add|sub|mul|div)\\s*\\(([a-zA-Z_\\d])+,([a-zA-Z_\\d]+)\\));";
+
     public ArrayList<String> ifmatch(String line, String regex) {
         ArrayList<String> tokens = new ArrayList<String>();
 
@@ -33,7 +35,7 @@ public class Parser extends Engine.Parser {
     }
 
     public ArrayList<String> ifconditional(String line){
-        final String conditional_regex = "(if)\\s(\\D+)\\s*(:)\\s*(print)\\s*(\\()\\s*(\\D+)\\s*(\\))(;)\\n(else)\\s(\\D+)\\s*(:)\\s*(print)\\s*(\\()\\s*(\\D+)\\s*(\\))(;)";
+        final String conditional_regex ="(if)\\s*\\((\\d+|\\w+)\\s*\\)\\s*\\{\\s*" + LoopIfElseBlock + "\\s*\\}\\s*else\\s*\\{\\s*.*?\\s*\\}";
         ArrayList<String> result = ifmatch(line, conditional_regex);
         if (result != null)
              return result;
@@ -42,7 +44,7 @@ public class Parser extends Engine.Parser {
     }
 
     public ArrayList<String> ifloop(String line){
-        final String loop_regex = "(loop)\\s*(\\()\\s*([\\D+\\d+])\\s*(\\))\\s*(:)\\s*(print)\\s*(\\()\\s*(\\D+)\\s*(\\))\\s*(;)";
+        final String loop_regex = "(loop)\\s*\\(\\s*(\\d+|\\w+)\\s*\\)\\s*\\{\\s*" + LoopIfElseBlock + "\\s*\\}";
         ArrayList<String> result = ifmatch(line, loop_regex);
         if (result != null)
              return result;
