@@ -57,7 +57,7 @@ public class Parser extends Engine.Parser {
         ArrayList<String> result = ifmatch(line, calculation);
         if (result != null)
              return result;
-        System.out.println("no bool");
+//        System.out.println("no bool");
         return null;
     }
 
@@ -75,7 +75,7 @@ public class Parser extends Engine.Parser {
          ArrayList<String> result = ifmatch(line, inout_regex);
          if (result != null)
             return result;
-        System.out.println("Syntax errror");
+//        System.out.println("Syntax errror");
          return null;
     }
 
@@ -121,6 +121,10 @@ public class Parser extends Engine.Parser {
             tokens = ifloop(line);
         }
 
+        else {
+            System.out.println("Syntax error :" + line);
+        }
+
         return tokens;
 
     }
@@ -142,14 +146,14 @@ public class Parser extends Engine.Parser {
     }
 
 
-    public static void main(String[] args) {
-//        Scanner scan = new Scanner();
-        Parser parse = new Parser();
-        ArrayList<String> lines = new ArrayList<String>();
-        lines = parse.toTokens("print (add(2, 3));");
-        if (lines != null)
-            System.out.println(lines.get(0));
-        else
-            System.out.println("Syntax error");
-    }
+//    public static void main(String[] args) {
+////        Scanner scan = new Scanner();
+//        Parser parse = new Parser();
+//        ArrayList<String> lines = null;
+//        lines = parse.toTokens("print (add(2, 3));");
+//        if (lines != null)
+//            System.out.println(lines.get(0));
+//        else
+//            System.out.println("Syntax error");
+//    }
 }

@@ -7,13 +7,13 @@ public class Main {
     public static void main(String[] args) {
 
 
-        ArrayList<String> lines = new ArrayList<String>();
+        ArrayList<String> lines = null;
         Scanner scanner = new Scanner();
         File file = new File("/home/zoha/IdeaProjects/Project/src/jHobab/zoha");
         lines = scanner.getLines(file);
 //        System.out.println(lines);
 
-        ArrayList<String> line_tokens = new ArrayList<String>();
+        ArrayList<String> line_tokens;
         Parser parse = new Parser();
         Evaluate evaluate = new Evaluate();
         for (String line : lines) {

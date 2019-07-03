@@ -11,16 +11,16 @@ public class Evaluate extends Engine.Evaluate {
     ArrayList<Float> floats;
     ArrayList<Bool> booleans;
 
-    public static void main(String[] args) {
-        Evaluate e = new Evaluate();
-        ArrayList<String> exp = new ArrayList<>();
-        exp.add("loop");
-        exp.add("3");
-        exp.add("print ('zoha'); print (add (3,  a)); print (a);");
-        e.evaluate_loop(exp);
-
-//        System.out.println( e.evaluate_line("12 + 84 + 31"));
-    }
+//    public static void main(String[] args) {
+//        Evaluate e = new Evaluate();
+//        ArrayList<String> exp = new ArrayList<>();
+//        exp.add("loop");
+//        exp.add("3");
+//        exp.add("print ('zoha'); print (add (3,  a)); print (a);");
+//        e.evaluate_loop(exp);
+//
+////        System.out.println( e.evaluate_line("12 + 84 + 31"));
+//    }
 
     public void overall_check(ArrayList<String> expression) {
         if (expression.get(0) == "print")
@@ -113,15 +113,15 @@ public class Evaluate extends Engine.Evaluate {
             evaluate_pstr(pstr);
             return pstr;
         }
-        if (pvar != null) {
+        else if (pvar != null) {
             evaluate_pvar(pvar);
             return pvar;
         }
-        if (pexp != null) {
+        else if (pexp != null) {
             evaluate_pexp(pexp);
             return pexp;
         }
-        if (arithexp != null) {
+        else if (arithexp != null) {
             evaluate_vassignment(arithexp);
             return arithexp;
         }
