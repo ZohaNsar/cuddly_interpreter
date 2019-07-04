@@ -1,8 +1,6 @@
 package jHobab;
-import java.io.StringBufferInputStream;
 import java.util.ArrayList;
 import java.lang.String;
-import java.util.StringTokenizer;
 
 public class Evaluate extends Engine.Evaluate {
 
@@ -23,19 +21,22 @@ public class Evaluate extends Engine.Evaluate {
 //    }
 
     public void overall_check(ArrayList<String> expression) {
-        if (expression.get(0) == "print")
+        if (expression.get(0).equals("print"))
             print_evaluation(expression);
 
-        if (expression.get(0) == "Int" || expression.get(0) == "Str" || expression.get(0) == "Float" || expression.get(0) == "Bool")
+        else if (expression.get(0).equals("Int") || expression.get(0).equals("Str") || expression.get(0).equals("Float") || expression.get(0).equals("Bool"))
             check_vassignment_evaluation(expression);
 
-        if (expression.get(0) == "If") {
+        else if (expression.get(0).equals("if")) {
             evaluate_conditional(expression);
         }
 
-        if (expression.get(0) == "loop"){
+        else if (expression.get(0).equals("loop")){
             evaluate_loop(expression);
         }
+
+        else
+            System.out.println("syntax no match" + expression.get(0));
 
     }
     public void print_evaluation(ArrayList<String> expression) {
@@ -99,10 +100,10 @@ public class Evaluate extends Engine.Evaluate {
     //else returns null
     public ArrayList<String> get_right_tokens(String line){
 
-        ArrayList<String> pstr;
-        ArrayList<String> pvar;
-        ArrayList<String> pexp;
-        ArrayList<String> arithexp;
+        ArrayList<String> pstr = null;
+        ArrayList<String> pvar = null;
+        ArrayList<String> pexp = null;
+        ArrayList<String> arithexp = null;
 
         pstr = line_pstr_ext_tokenizer(line);
         pvar = line_pvar_ext_tokenizer(line);
@@ -272,44 +273,43 @@ public class Evaluate extends Engine.Evaluate {
     //to execute what is stated in the loop block which was the most challenging part of the damn project :/
     @Override
     public ArrayList<String> evaluate_loop(ArrayList<String> expression) {
-        boolean Var;
-        boolean Str;
-        boolean Exp;
-        boolean Arithmetic_assignment;
+        System.out.println("in evaluate loop");
 
         int loop_counter;
 
-        String exp = expression.get(2);
+        String exp = expression.get(5);
         String[] commands = exp.split(";");
-        ArrayList<String> tokens = new ArrayList<>();
 
-
-        if (expression.get(1).charAt(0) < 'a' || expression.get(1).charAt(9) > 'z'){
+        if (expression.get(2).charAt(0) >= '0' && expression.get(1).charAt(9) <= '9'){
             loop_counter = Integer.parseInt(expression.get(1));
         }
-        else if(check_if_exists_int(expression.get(1)) != null){
-                Int counter = check_if_exists_int(expression.get(1));
+        else if(check_if_exists_int(expression.get(2)) != null){
+                Int counter = check_if_exists_int(expression.get(2));
                 loop_counter = counter.value;
         }
         else {
             System.out.println("counter variable does not exist");
             return null;
         }
-
+        System.out.println(loop_counter);
         int need_break = 0;
 
         //to do the loop counting based on the integer given and number of statements in loop block
         for(int j = 0; j < loop_counter; ++j) {
-            for (int i = 0; i < exp.length(); ++i) {
+            for (int i = 0; i < commands.length; ++i) {
+                System.out.println("in evaluate loop :" + commands[i] + ";");
                 if(get_right_tokens(commands[i] + ";") == null){
                     ++need_break;
+                }
+                else {
+                    get_right_tokens(commands[i] + ";");
                 }
 
             }
             if (need_break != 0)
                 break;
         }
-        System.out.println(commands[2]);
+//        System.out.println(commands[2]);
 
         return null;
     }
@@ -317,13 +317,67 @@ public class Evaluate extends Engine.Evaluate {
     //to assign a value to a specified type
     @Override
     public void evaluate_vassignment(ArrayList<String> expression) {
+        String var_name = expression.get(1);
+        String var_value = expression.get(3);
 
+        int check = 0;
+
+        if (expression.get(0) == "Int") {
+            for (Int integer : integers) {
+                if (integer.name.equals(var_name)){
+                    integer.value = Integer.parseInt(var_value);
+                    break;
+                }
+                else
+                    ++check;
+
+            }
+            if (check > integers.size()-1){
+                check_vassignment_evaluation(expression);
+            }
+        }
+
+        if (expression.get(0).equals("Str")) {
+            for (Str string : strings) {
+                if (string.name.equals(var_name)){
+                    string.value = var_value;
+                    break;
+                }
+                else
+                    ++check;
+            }
+            if (check > strings.size()-1){
+                check_vassignment_evaluation(expression);
+            }
+        }
     }
 
     //to print what is stated in conditional expression
     @Override
-    public ArrayList<String> evaluate_conditional(ArrayList<String> expression) {
-        return null;
+    public void evaluate_conditional(ArrayList<String> expression) {
+
+        Int if_condition = check_if_exists_int(expression.get(1));
+        int condition = if_condition.value;
+
+        String if_exp = expression.get(3);
+        String else_exp = expression.get(7);
+
+        String[] if_commands = if_exp.split(";");
+        String[] else_commands = else_exp.split(";");
+
+        if (condition > 0){
+            for(int i = 0; i < if_commands.length; ++i){
+                System.out.println();
+                get_right_tokens(if_commands[i] + ";");
+            }
+        }
+        else {
+            for(int i = 0; i < else_commands.length; ++i){
+                get_right_tokens(else_commands[i] + ";");
+            }
+        }
+
+
     }
 
     @Override
