@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class Parser extends Engine.Parser {
 
 
-    final String LoopIfElseBlock ="(?:(add|sub|mul|div)\\s*\\(([a-zA-Z_\\d])+,([a-zA-Z_\\d]+)\\));";
+    final String LoopIfElseBlock = "((print)\\s*\\(\\s*(\\d+|\\w+|'\\s*\\w+\\s*'|(add|sub|mul|div)\\s*\\(\\s*(\\D+|\\d+)\\s*,\\s*(\\d+|\\D+)\\s*\\))\\s*\\)\\s*;|(add|sub|mul|div)\\s*\\(\\s*(\\d+|\\w+)\\s*,\\s*(\\d+|\\w+)\\s*\\)\\s*;)+?";
 
     public ArrayList<String> ifmatch(String line, String regex) {
         ArrayList<String> tokens = new ArrayList<String>();
@@ -19,7 +19,7 @@ public class Parser extends Engine.Parser {
         while (matcher.find()) {
 //            System.out.println("Full match: " + matcher.group(0));
             for (int i = 1; i <= matcher.groupCount() && matcher.group(i) != null; i++) {
-                tokens.add(i - 1, matcher.group(i));;
+                tokens.add(i - 1, matcher.group(i));
             }
             return tokens;
         }
@@ -35,7 +35,7 @@ public class Parser extends Engine.Parser {
     }
 
     public ArrayList<String> ifconditional(String line){
-        final String conditional_regex ="(if)\\s*\\((\\d+|\\w+)\\s*\\)\\s*\\{\\s*" + LoopIfElseBlock + "\\s*\\}\\s*else\\s*\\{\\s*.*?\\s*\\}";
+        final String conditional_regex ="(if)\\s*\\((\\d+|\\w+)\\s*\\)\\s*(\\{)\\s*" + LoopIfElseBlock + "\\s*(\\})\\s*(else)\\s*(\\{)\\s*" + LoopIfElseBlock + "\\s*(\\})";
         ArrayList<String> result = ifmatch(line, conditional_regex);
         if (result != null)
              return result;
@@ -44,11 +44,11 @@ public class Parser extends Engine.Parser {
     }
 
     public ArrayList<String> ifloop(String line){
-        final String loop_regex = "(loop)\\s*\\(\\s*(\\d+|\\w+)\\s*\\)\\s*\\{\\s*" + LoopIfElseBlock + "\\s*\\}";
+        final String loop_regex ="(loop)\\s*(\\()\\s*(\\d+|\\w+)\\s*(\\))\\s*(\\{)\\s*" + LoopIfElseBlock + "\\s*(\\})";
         ArrayList<String> result = ifmatch(line, loop_regex);
         if (result != null)
              return result;
-
+//        System.out.println("not loop" + line);
         return null;
     }
 
@@ -121,9 +121,9 @@ public class Parser extends Engine.Parser {
             tokens = ifloop(line);
         }
 
-        else {
-            System.out.println("Syntax error :" + line);
-        }
+//        else {
+//            System.out.println("Syntax error :" + line);
+//        }
 
         return tokens;
 
